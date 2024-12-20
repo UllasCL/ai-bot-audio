@@ -1,6 +1,7 @@
 <script lang="ts">
   export let isRecording: boolean;
   export let isProcessing: boolean;
+  export let disabled = false;
 </script>
 
 <button 
@@ -24,6 +25,7 @@
 
 <style>
   .voice-button {
+    position: relative;
     min-width: 44px;
     height: 44px;
     padding: 0;
@@ -37,17 +39,15 @@
     justify-content: center;
     flex-shrink: 0;
     transition: all 0.3s ease;
+    overflow: visible;
   }
 
   .voice-button:hover:not(:disabled) {
     background: #3154b3;
+    transform: translateY(-1px);
   }
 
-  .voice-button.recording {
-    background: #dc3545;
-    animation: pulse 1.5s infinite;
-  }
-
+  .voice-button:disabled,
   .voice-button.processing {
     opacity: 0.7;
     cursor: not-allowed;

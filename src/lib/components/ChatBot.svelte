@@ -72,7 +72,7 @@
     addMessage({
       text: event.detail,
       isBot: true,
-      type: 'error'
+      type: 'text'
     });
   }
 

@@ -37,10 +37,10 @@
       <img src="https://prod-arise-b2b-cdn.gonuclei.com/public/arise_b2b_prod_images/production/icons/nuclei_ic.png" class="logo" alt="Nuclei Logo" />
     </a>
     <h1>AI powered bot</h1>
-    <button class="click-me-btn" on:click={loadChatSimple}>Click Me</button>
-    <VoiceRecorder />
+<!--    <button class="click-me-btn" on:click={loadChatSimple}>Click Me</button>-->
   </div>
-  <ChatBot/>
+  <VoiceRecorder></VoiceRecorder>
+<!--  <ChatBot/>-->
 </main>
 
 <style>
