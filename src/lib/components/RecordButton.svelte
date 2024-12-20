@@ -1,7 +1,7 @@
 <script lang="ts">
   import RecordIcon from './icons/RecordIcon.svelte';
   import StopIcon from './icons/StopIcon.svelte';
-  import RecordingAnimation from './animations/RecordingAnimation.svelte';
+  import RecordingAnimation from "./VoiceRecorder/animations/RecordingAnimation.svelte";
 
   export let isRecording: boolean;
   export let isProcessing: boolean;

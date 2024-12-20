@@ -1,0 +1,4 @@
+<Response>
+  <Speak>This is the demo between the Open A.I. realtime API and Plivo.</Speak>
+  <Redirect>https://2e4f-122-172-84-20.ngrok-free.app/webhook</Redirect>
+</Response>
