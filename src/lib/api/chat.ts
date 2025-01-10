@@ -1,7 +1,7 @@
 import type { ChatResponse, ChatRequest } from '../types/chat';
 
 export async function sendChatMessage(request: ChatRequest): Promise<ChatResponse> {
-  const response = await fetch('https://kale-dev.gonuclei.com/api/analyze/local', {
+  const response = await fetch('https://uat-arise.gonuclei.com/api/chat/complete/test', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

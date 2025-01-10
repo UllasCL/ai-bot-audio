@@ -1,5 +1,7 @@
 <script lang="ts">
 
+    import ChatBot from "./lib/components/ChatBot.svelte";
+
     let isSessionActive = false;
     let events = [];
     let dataChannel = null;
@@ -100,6 +102,5 @@
 
 <!-- UI Code -->
 <div>
-    <button on:click={startSession}>Start Session</button>
-    <button on:click={stopSession}>Stop Session</button>
+    <ChatBot/>
 </div>
