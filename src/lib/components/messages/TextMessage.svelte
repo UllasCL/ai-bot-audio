@@ -5,7 +5,9 @@
 </script>
 
 <MessageContainer {isBot}>
-  <p class="message-text">{text}</p>
+  {#each text.split('\n') as line}
+    <p class="message-text">{line}</p>
+  {/each}
 </MessageContainer>
 
 <style>

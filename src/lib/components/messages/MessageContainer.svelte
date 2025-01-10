@@ -20,6 +20,7 @@
     padding: 12px 16px;
     border-radius: 12px;
     word-wrap: break-word;
+    text-align: left; /* Ensures text is aligned to the left */
   }
 
   .bot {
@@ -32,7 +33,7 @@
   }
 
   .user {
-    justify-content: flex-end;
+    justify-content: flex-start; /* Aligns the user's text container to the left */
   }
 
   .user .message {
