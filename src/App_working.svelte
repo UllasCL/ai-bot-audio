@@ -21,7 +21,7 @@
         try {
             const url: string = "https://api.openai.com/v1/realtime/sessions";
             const headers: Record<string, string> = {
-                Authorization: `Bearer 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`,
+                Authorization: `Bearer`
                 "Content-Type": "application/json",
             };
 
