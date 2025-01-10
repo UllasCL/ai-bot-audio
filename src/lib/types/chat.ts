@@ -3,7 +3,7 @@ export interface Message {
   text: string;
   isBot: boolean;
   audioUrl?: string;
-  type?: 'text' | 'voice';
+  type?: 'text' | 'voice' | 'error';
 }
 
 export interface ChatResponse {
@@ -15,7 +15,6 @@ export interface ChatResponse {
 export interface ChatRequest {
   query: string;
   session_id?: string;
-  type?: 'text' | 'voice';
 }
 
 export interface VoiceMessage {

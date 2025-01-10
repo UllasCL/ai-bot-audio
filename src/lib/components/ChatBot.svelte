@@ -23,7 +23,7 @@
 
   async function handleMessage(event: CustomEvent<TextMessage | VoiceMessage>) {
     const { type, content } = event.detail;
-    
+
     // Create user message
     const userMessage: Message = {
       text: content,
@@ -31,21 +31,23 @@
       type,
       ...(type === 'voice' && { audioUrl: (event.detail as VoiceMessage).audioUrl })
     };
-    
+
     addMessage(userMessage);
-    
+
     try {
       isLoading.set(true);
-      
+
       if (type === 'text') {
         // For text messages, make the chat API call
+        console.log("calling api"
+        )
         const response = await sendChatMessage({
           query: content,
           session_id: $sessionId
         });
-        
+
         sessionId.set(response.session_id);
-        
+
         addMessage({
           text: response.result,
           isBot: true,
@@ -91,8 +93,8 @@
 </script>
 
 <div class="chat-container">
-  <button 
-    class="chat-trigger" 
+  <button
+    class="chat-trigger"
     class:open={isOpen}
     on:click={toggleChat}
     aria-label={isOpen ? 'Close chat' : 'Open chat'}
@@ -111,14 +113,14 @@
 
   <div class="chat-window" class:visible={isOpen}>
     <ChatHeader onClose={toggleChat} />
-    
-    <MessageList 
+
+    <MessageList
       bind:container={chatContainer}
       onScroll={handleScrollEvent}
     />
 
     {#if isScrolling}
-      <button 
+      <button
         class="scroll-bottom"
         on:click={() => {
           scrollToBottom(chatContainer);
@@ -131,7 +133,7 @@
       </button>
     {/if}
 
-    <ChatInput 
+    <ChatInput
       on:send={handleMessage}
       on:error={handleError}
     />

@@ -19,6 +19,9 @@
     "vite": "^6.0.3"
   },
   "dependencies": {
-    "lamejs": "^1.2.1"
+    "@sveltejs/adapter-auto": "^3.3.1",
+    "axios": "^1.7.9",
+    "lamejs": "^1.2.1",
+    "svelte-preprocess": "^6.0.3"
   }
 }
