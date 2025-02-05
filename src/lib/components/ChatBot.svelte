@@ -4,27 +4,24 @@
   import { isLoading } from '../stores/loading';
   import { sendChatMessage } from '../api/chat';
   import { handleScroll, isAtBottom, scrollToBottom } from '../utils/scroll';
-  import MessageList from './MessageList.svelte';
-  import ChatInput from './chat/ChatInput.svelte';
-  import ChatHeader from './ChatHeader.svelte';
   import type { Message, TextMessage, VoiceMessage } from '../types/chat';
 
   let isOpen = false;
   let chatContainer: HTMLElement;
   let isScrolling = false;
+  let input = '';
 
-  onMount(() => {
-    addMessage({
-      text: "Hello! How can I help you today?",
-      isBot: true,
-      type: 'text'
+  function formatTime(date: Date): string {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
     });
-  });
+  }
 
   async function handleMessage(event: CustomEvent<TextMessage | VoiceMessage>) {
     const { type, content } = event.detail;
 
-    // Create user message
     const userMessage: Message = {
       text: content,
       isBot: false,
@@ -36,11 +33,7 @@
 
     try {
       isLoading.set(true);
-
       if (type === 'text') {
-        // For text messages, make the chat API call
-        console.log("calling api"
-        )
         const response = await sendChatMessage({
           query: content,
           session_id: $sessionId
@@ -54,8 +47,6 @@
           type: 'text'
         });
       }
-      // For voice messages, we don't add any additional messages since
-      // the response is already included in the audio URL
     } catch (error) {
       addMessage({
         text: "Sorry, I encountered an error. Please try again.",
@@ -87,6 +78,32 @@
     isOpen = !isOpen;
   }
 
+  function handleSubmit() {
+    if (!input.trim()) return;
+    handleMessage(new CustomEvent('send', {
+      detail: {
+        type: 'text',
+        content: input.trim()
+      }
+    }));
+    input = '';
+  }
+
+  function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmit();
+    }
+  }
+
+  onMount(() => {
+    addMessage({
+      text: "Hi, I am AI concierge.\nHow can I help you today?",
+      isBot: true,
+      type: 'text'
+    });
+  });
+
   $: if (chatContainer && $chatMessages.length && !isScrolling) {
     scrollToBottom(chatContainer);
   }
@@ -94,10 +111,10 @@
 
 <div class="chat-container">
   <button
-    class="chat-trigger"
-    class:open={isOpen}
-    on:click={toggleChat}
-    aria-label={isOpen ? 'Close chat' : 'Open chat'}
+          class="chat-trigger"
+          class:open={isOpen}
+          on:click={toggleChat}
+          aria-label={isOpen ? 'Close chat' : 'Open chat'}
   >
     {#if isOpen}
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -112,31 +129,99 @@
   </button>
 
   <div class="chat-window" class:visible={isOpen}>
-    <ChatHeader onClose={toggleChat} />
+    <header class="chat-header">
+      <div class="header-content">
+        <div class="avatar">
+          <img src="/avatar.png" alt="AI concierge" />
+        </div>
+        <div class="title">Ask AI concierge</div>
+      </div>
+      <button class="close-button" on:click={toggleChat}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </header>
 
-    <MessageList
-      bind:container={chatContainer}
-      onScroll={handleScrollEvent}
-    />
+    <div
+            class="messages-container"
+            bind:this={chatContainer}
+            on:scroll={handleScrollEvent}
+    >
+      {#each $chatMessages as message}
+        <div class="message {message.isBot ? 'bot' : 'user'}">
+          {#if message.isBot}
+            <div class="avatar">
+              <img src="/avatar.png" alt="AI concierge" />
+            </div>
+          {/if}
+          <div class="message-content">
+            <div class="message-header">
+              <span class="sender">{message.isBot ? 'AI concierge' : 'You'}</span>
+              <span class="time">{formatTime(new Date())}</span>
+            </div>
+            <div class="message-text">
+              {#if message.type === 'text'}
+                {message.text}
+              {:else if message.type === 'voice'}
+                <audio controls src={message.audioUrl}></audio>
+              {/if}
+            </div>
+          </div>
+        </div>
+      {/each}
+
+      {#if $isLoading}
+        <div class="message bot">
+          <div class="avatar">
+            <img src="/avatar.png" alt="AI concierge" />
+          </div>
+          <div class="message-content">
+            <div class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      {/if}
+    </div>
 
     {#if isScrolling}
       <button
-        class="scroll-bottom"
-        on:click={() => {
+              class="scroll-bottom"
+              on:click={() => {
           scrollToBottom(chatContainer);
           isScrolling = false;
         }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 19V5M5 12l7 7 7-7"/>
         </svg>
       </button>
     {/if}
 
-    <ChatInput
-      on:send={handleMessage}
-      on:error={handleError}
-    />
+    <div class="input-container">
+      <div class="input-wrapper">
+        <textarea
+                class="message-input"
+                placeholder="Ask a question"
+                bind:value={input}
+                on:keydown={handleKeyDown}
+                rows="1"
+        ></textarea>
+        <button
+                class="send-button"
+                on:click={handleSubmit}
+                disabled={!input.trim()}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -149,46 +234,45 @@
   }
 
   .chat-trigger {
-    width: 60px;
-    height: 60px;
-    border-radius: 30px;
-    background: #4169E1;
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    background: #0000cc;
     color: white;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
   }
 
   .chat-trigger:hover {
     transform: scale(1.05);
-    background: #3154b3;
+    background: #0000b3;
   }
 
   .chat-trigger.open {
-    background: #3154b3;
-    transform: rotate(180deg);
+    background: #0000b3;
   }
 
   .chat-window {
     position: absolute;
     bottom: 80px;
     right: 0;
-    width: 360px;
-    height: 600px;
+    width: 400px;
+    height: 700px;
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     transform: scale(0.95);
     opacity: 0;
     pointer-events: none;
     transform-origin: bottom right;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
   }
 
   .chat-window.visible {
@@ -197,18 +281,169 @@
     pointer-events: all;
   }
 
+  .chat-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  .close-button {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+  }
+
+  .close-button:hover {
+    background-color: #f5f5f5;
+  }
+
+  .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background-color: #f8f9fd;
+  }
+
+  .message {
+    display: flex;
+    gap: 12px;
+    max-width: 85%;
+  }
+
+  .message.bot {
+    align-self: flex-start;
+  }
+
+  .message.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+  }
+
+  .message-content {
+    background: white;
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .message.bot .message-content {
+    background: #0000cc;
+    color: white;
+  }
+
+  .message.user .message-content {
+    background: #f0f0f0;
+    color: #1a1a1a;
+  }
+
+  .message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+
+  .message.bot .message-header {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .message.user .message-header {
+    color: #1a1a1a;
+  }
+
+  .sender {
+    font-weight: 500;
+  }
+
+  .time {
+    opacity: 0.8;
+  }
+
+  .message.user .time {
+    color: #666;
+  }
+
+  .message-text {
+    white-space: pre-line;
+    line-height: 1.5;
+    font-size: 14px;
+  }
+
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 8px 0;
+  }
+
+  .typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out;
+  }
+
+  .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+  .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+  }
+
   .scroll-bottom {
     position: absolute;
-    right: 24px;
+    right: 20px;
     bottom: 80px;
     width: 40px;
     height: 40px;
     border-radius: 20px;
-    background: #4169E1;
+    background: #0000cc;
     color: white;
     border: none;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -220,11 +455,73 @@
     transform: scale(1.05);
   }
 
+  .input-container {
+    padding: 16px 20px;
+    background: white;
+    border-top: 1px solid #f0f0f0;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .input-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+
+  .message-input {
+    flex: 1;
+    border: none;
+    padding: 4px 0;
+    font-size: 14px;
+    resize: none;
+    max-height: 120px;
+    line-height: 1.5;
+    font-family: inherit;
+    background: transparent;
+    color: #1a1a1a;
+    text-align: left;
+  }
+
+  .message-input::placeholder {
+    color: #666;
+  }
+
+  .message-input:focus {
+    outline: none;
+  }
+
+  .send-button {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #0000cc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .send-button:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .send-button:not(:disabled):hover {
+    background-color: #f5f5f5;
+  }
+
   @media (max-width: 480px) {
     .chat-window {
-      width: calc(100vw - 48px);
-      height: calc(100vh - 120px);
+      width: calc(100vw - 32px);
+      height: calc(100vh - 100px);
       bottom: 80px;
+      right: 16px;
     }
   }
 </style>
