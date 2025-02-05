@@ -138,9 +138,9 @@
     <header class="chat-header">
       <div class="header-content">
         <div class="avatar">
-          <img src="/avatar.png" alt="Prawan" />
+          <img src="/avatar.png" alt="AI concierge" />
         </div>
-        <div class="title">Ask Prawan</div>
+        <div class="title">Ask AI concierge</div>
       </div>
       <button class="close-button" on:click={toggleChat}>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -159,12 +159,12 @@
         <div class="message {message.isBot ? 'bot' : 'user'}">
           {#if message.isBot}
             <div class="avatar">
-              <img src="/avatar.png" alt="Prawan" />
+              <img src="/avatar.png" alt="AI concierge" />
             </div>
           {/if}
           <div class="message-content">
             <div class="message-header">
-              <span class="sender">{message.isBot ? 'Prawan' : 'You'}</span>
+              <span class="sender">{message.isBot ? 'AI concierge' : 'You'}</span>
               <span class="time">{formatTime(new Date())}</span>
             </div>
             <div class="message-text">
@@ -181,7 +181,7 @@
       {#if $isLoading}
         <div class="message bot">
           <div class="avatar">
-            <img src="/avatar.png" alt="Prawan" />
+            <img src="/avatar.png" alt="AI concierge" />
           </div>
           <div class="message-content">
             <div class="typing-indicator">
