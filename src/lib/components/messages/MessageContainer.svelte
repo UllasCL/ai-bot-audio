@@ -33,7 +33,7 @@
   }
 
   .user {
-    justify-content: flex-start; /* Aligns the user's text container to the left */
+    justify-content: flex-end;
   }
 
   .user .message {
