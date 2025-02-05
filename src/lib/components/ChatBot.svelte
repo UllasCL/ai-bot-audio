@@ -6,7 +6,7 @@
   import { handleScroll, isAtBottom, scrollToBottom } from '../utils/scroll';
   import type { Message, TextMessage, VoiceMessage } from '../types/chat';
 
-  let isOpen = false;
+  let isOpen = true; // Set to true by default
   let chatContainer: HTMLElement;
   let isScrolling = false;
   let input = '';
@@ -234,39 +234,20 @@
 <style>
   .chat-container {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1000;
   }
 
   .chat-trigger {
-    width: 56px;
-    height: 56px;
-    border-radius: 28px;
-    background: #0000cc;
-    color: white;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-  }
-
-  .chat-trigger:hover {
-    transform: scale(1.05);
-    background: #0000b3;
-  }
-
-  .chat-trigger.open {
-    background: #0000b3;
+    display: none; /* Hide the trigger button since we want it always open */
   }
 
   .chat-window {
-    position: absolute;
-    bottom: 80px;
-    right: 0;
+    position: relative; /* Change from absolute to relative */
+    bottom: auto;
+    right: auto;
     width: 400px;
     height: 700px;
     background: white;
@@ -277,7 +258,6 @@
     transform: scale(0.95);
     opacity: 0;
     pointer-events: none;
-    transform-origin: bottom right;
     transition: all 0.2s ease;
   }
 
@@ -541,9 +521,7 @@
   @media (max-width: 480px) {
     .chat-window {
       width: calc(100vw - 32px);
-      height: calc(100vh - 100px);
-      bottom: 80px;
-      right: 16px;
+      height: calc(100vh - 32px);
     }
   }
 </style>
