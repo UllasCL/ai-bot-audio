@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import { chatMessages, sessionId, addMessage } from '../stores/chat';
   import { isLoading } from '../stores/loading';
   import { sendChatMessage } from '../api/chat';
@@ -10,6 +10,7 @@
   let chatContainer: HTMLElement;
   let isScrolling = false;
   let input = '';
+  let shouldScroll = true;
 
   function formatTime(date: Date): string {
     return date.toLocaleTimeString('en-US', {
@@ -21,6 +22,7 @@
 
   async function handleMessage(event: CustomEvent<TextMessage | VoiceMessage>) {
     const { type, content } = event.detail;
+    shouldScroll = true;
 
     const userMessage: Message = {
       text: content,
@@ -55,9 +57,6 @@
       });
     } finally {
       isLoading.set(false);
-      if (chatContainer) {
-        scrollToBottom(chatContainer);
-      }
     }
   }
 
@@ -72,6 +71,7 @@
   function handleScrollEvent(event: Event) {
     const container = event.target as HTMLElement;
     isScrolling = !isAtBottom(container);
+    shouldScroll = isAtBottom(container);
   }
 
   function toggleChat() {
@@ -104,7 +104,13 @@
     });
   });
 
-  $: if (chatContainer && $chatMessages.length && !isScrolling) {
+  afterUpdate(() => {
+    if (shouldScroll && chatContainer) {
+      scrollToBottom(chatContainer);
+    }
+  });
+
+  $: if (chatContainer && $chatMessages.length && shouldScroll) {
     scrollToBottom(chatContainer);
   }
 </script>
@@ -132,9 +138,9 @@
     <header class="chat-header">
       <div class="header-content">
         <div class="avatar">
-          <img src="/avatar.png" alt="AI concierge" />
+          <img src="/avatar.png" alt="Prawan" />
         </div>
-        <div class="title">Ask AI concierge</div>
+        <div class="title">Ask Prawan</div>
       </div>
       <button class="close-button" on:click={toggleChat}>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -153,12 +159,12 @@
         <div class="message {message.isBot ? 'bot' : 'user'}">
           {#if message.isBot}
             <div class="avatar">
-              <img src="/avatar.png" alt="AI concierge" />
+              <img src="/avatar.png" alt="Prawan" />
             </div>
           {/if}
           <div class="message-content">
             <div class="message-header">
-              <span class="sender">{message.isBot ? 'AI concierge' : 'You'}</span>
+              <span class="sender">{message.isBot ? 'Prawan' : 'You'}</span>
               <span class="time">{formatTime(new Date())}</span>
             </div>
             <div class="message-text">
@@ -175,7 +181,7 @@
       {#if $isLoading}
         <div class="message bot">
           <div class="avatar">
-            <img src="/avatar.png" alt="AI concierge" />
+            <img src="/avatar.png" alt="Prawan" />
           </div>
           <div class="message-content">
             <div class="typing-indicator">
@@ -352,11 +358,13 @@
 
   .message.bot {
     align-self: flex-start;
+    max-width: 95%;
   }
 
   .message.user {
     align-self: flex-end;
     flex-direction: row-reverse;
+    max-width: 85%;
   }
 
   .message-content {
@@ -369,11 +377,13 @@
   .message.bot .message-content {
     background: #0000cc;
     color: white;
+    padding: 12px 16px;
   }
 
   .message.user .message-content {
     background: #f0f0f0;
     color: #1a1a1a;
+    padding: 12px 16px;
   }
 
   .message-header {
@@ -406,8 +416,20 @@
 
   .message-text {
     white-space: pre-line;
-    line-height: 1.5;
+    line-height: 1.4;
     font-size: 14px;
+  }
+
+  .message.bot .message-text {
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .message.user .message-text {
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.4;
   }
 
   .typing-indicator {
