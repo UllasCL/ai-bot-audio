@@ -398,12 +398,13 @@
     white-space: pre-line;
     line-height: 1.4;
     font-size: 14px;
+    text-align: left; /* Add this to ensure left alignment */
   }
 
   .message.bot .message-text {
-    text-align: center;
     font-size: 14px;
     line-height: 1.4;
+    text-align: left; /* Change from center to left */
   }
 
   .message.user .message-text {
