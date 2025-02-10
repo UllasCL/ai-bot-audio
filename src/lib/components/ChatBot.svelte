@@ -89,11 +89,19 @@
     input = '';
   }
 
+  function autoResizeTextarea(event: Event) {
+    const textarea = event.target as HTMLTextAreaElement;
+    textarea.style.height = 'auto'; // Reset height
+    const maxHeight = 60; // Set maximum height for 3 lines (adjust as needed)
+    textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px'; // Set to scroll height or max height
+  }
+
   function handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       handleSubmit();
     }
+    autoResizeTextarea(event); // Call the auto-resize function
   }
 
   onMount(() => {
@@ -140,7 +148,7 @@
         <div class="avatar">
           <img src="/avatar.png" alt="AI concierge" />
         </div>
-        <div class="title">Ask AI concierge</div>
+        <div class="title">Ask your AI concierge</div>
       </div>
       <button class="close-button" on:click={toggleChat}>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -216,6 +224,7 @@
                 bind:value={input}
                 on:keydown={handleKeyDown}
                 rows="1"
+                on:input={autoResizeTextarea}
         ></textarea>
         <button
                 class="send-button"
@@ -355,7 +364,7 @@
   }
 
   .message.bot .message-content {
-    background: #0000cc;
+    background: #E20074;
     color: white;
     padding: 12px 16px;
   }
@@ -442,7 +451,7 @@
     width: 40px;
     height: 40px;
     border-radius: 20px;
-    background: #0000cc;
+    background: #E20074;
     color: white;
     border: none;
     cursor: pointer;
@@ -481,7 +490,8 @@
     padding: 4px 0;
     font-size: 14px;
     resize: none;
-    max-height: 120px;
+    max-height: 60px; /* Adjust based on your line height */
+    overflow: hidden; /* Hide overflow */
     line-height: 1.5;
     font-family: inherit;
     background: transparent;
@@ -502,7 +512,7 @@
     border: none;
     padding: 4px;
     cursor: pointer;
-    color: #0000cc;
+    color: #E20074;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -516,7 +526,7 @@
   }
 
   .send-button:not(:disabled):hover {
-    background-color: #f5f5f5;
+    background-color: #E20074;
   }
 
   @media (max-width: 480px) {
