@@ -140,7 +140,7 @@
         <div class="avatar">
           <img src="/avatar.png" alt="AI concierge" />
         </div>
-        <div class="title">Ask AI concierge</div>
+        <div class="title">Ask your AI concierge</div>
       </div>
       <button class="close-button" on:click={toggleChat}>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -355,7 +355,7 @@
   }
 
   .message.bot .message-content {
-    background: #0000cc;
+    background: #E20074;
     color: white;
     padding: 12px 16px;
   }
@@ -442,7 +442,7 @@
     width: 40px;
     height: 40px;
     border-radius: 20px;
-    background: #0000cc;
+    background: #E20074;
     color: white;
     border: none;
     cursor: pointer;
@@ -502,7 +502,7 @@
     border: none;
     padding: 4px;
     cursor: pointer;
-    color: #0000cc;
+    color: #E20074;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -516,7 +516,7 @@
   }
 
   .send-button:not(:disabled):hover {
-    background-color: #f5f5f5;
+    background-color: #E20074;
   }
 
   @media (max-width: 480px) {
