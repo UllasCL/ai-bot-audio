@@ -106,7 +106,7 @@
 
   onMount(() => {
     addMessage({
-      text: "Hi, I am AI concierge.\nHow can I help you today?",
+      text: "Hi, I am Alan.\nHow can I help you today?",
       isBot: true,
       type: 'text'
     });
@@ -172,7 +172,7 @@
           {/if}
           <div class="message-content">
             <div class="message-header">
-              <span class="sender">{message.isBot ? 'AI concierge' : 'You'}</span>
+              <span class="sender">{message.isBot ? 'Alan' : 'You'}</span>
               <span class="time">{formatTime(new Date())}</span>
             </div>
             <div class="message-text">
