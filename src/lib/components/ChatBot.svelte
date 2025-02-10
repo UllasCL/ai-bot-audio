@@ -172,7 +172,7 @@
           {/if}
           <div class="message-content">
             <div class="message-header">
-              <span class="sender">{message.isBot ? 'AI concierge' : 'You'}</span>
+              <span class="sender">{message.isBot ? 'Your AI concierge' : 'You'}</span>
               <span class="time">{formatTime(new Date())}</span>
             </div>
             <div class="message-text">
