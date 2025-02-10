@@ -89,11 +89,19 @@
     input = '';
   }
 
+  function autoResizeTextarea(event: Event) {
+    const textarea = event.target as HTMLTextAreaElement;
+    textarea.style.height = 'auto'; // Reset height
+    const maxHeight = 60; // Set maximum height for 3 lines (adjust as needed)
+    textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px'; // Set to scroll height or max height
+  }
+
   function handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       handleSubmit();
     }
+    autoResizeTextarea(event); // Call the auto-resize function
   }
 
   onMount(() => {
@@ -216,6 +224,7 @@
                 bind:value={input}
                 on:keydown={handleKeyDown}
                 rows="1"
+                on:input={autoResizeTextarea}
         ></textarea>
         <button
                 class="send-button"
@@ -481,7 +490,8 @@
     padding: 4px 0;
     font-size: 14px;
     resize: none;
-    max-height: 120px;
+    max-height: 60px; /* Adjust based on your line height */
+    overflow: hidden; /* Hide overflow */
     line-height: 1.5;
     font-family: inherit;
     background: transparent;
