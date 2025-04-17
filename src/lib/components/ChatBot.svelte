@@ -38,7 +38,8 @@
       if (type === 'text') {
         const response = await sendChatMessage({
           query: content,
-          session_id: $sessionId
+          session_id: $sessionId,
+          partnerId:"1",
         });
 
         sessionId.set(response.session_id);
@@ -106,7 +107,7 @@
 
   onMount(() => {
     addMessage({
-      text: "Hi, I am Alan.\nHow can I help you today?",
+      text: "Hi, I am Yono.\nHow can I help you today?",
       isBot: true,
       type: 'text'
     });
