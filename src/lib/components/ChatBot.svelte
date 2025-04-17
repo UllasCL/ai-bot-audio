@@ -38,7 +38,8 @@
       if (type === 'text') {
         const response = await sendChatMessage({
           query: content,
-          session_id: $sessionId
+          session_id: $sessionId,
+          partnerId:"1",
         });
 
         sessionId.set(response.session_id);
@@ -106,7 +107,7 @@
 
   onMount(() => {
     addMessage({
-      text: "Hi, I am Alan.\nHow can I help you today?",
+      text: "Hi, I am Yono.\nHow can I help you today?",
       isBot: true,
       type: 'text'
     });
@@ -172,7 +173,7 @@
           {/if}
           <div class="message-content">
             <div class="message-header">
-              <span class="sender">{message.isBot ? 'Alan' : 'You'}</span>
+              <span class="sender">{message.isBot ? 'Yono' : 'You'}</span>
               <span class="time">{formatTime(new Date())}</span>
             </div>
             <div class="message-text">
@@ -364,7 +365,7 @@
   }
 
   .message.bot .message-content {
-    background: #E20074;
+    background: #652A84;
     color: white;
     padding: 12px 16px;
   }
@@ -451,7 +452,7 @@
     width: 40px;
     height: 40px;
     border-radius: 20px;
-    background: #E20074;
+    background: #652A84;
     color: white;
     border: none;
     cursor: pointer;
@@ -512,7 +513,7 @@
     border: none;
     padding: 4px;
     cursor: pointer;
-    color: #E20074;
+    color: #652A84;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -526,7 +527,7 @@
   }
 
   .send-button:not(:disabled):hover {
-    background-color: #E20074;
+    background-color: #280071;
   }
 
   @media (max-width: 480px) {

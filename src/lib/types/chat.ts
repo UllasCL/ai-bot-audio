@@ -15,6 +15,7 @@ export interface ChatResponse {
 export interface ChatRequest {
   query: string;
   session_id?: string;
+  partnerId?: string;
 }
 
 export interface VoiceMessage {
