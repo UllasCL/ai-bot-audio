@@ -3,7 +3,7 @@
 
     let isCalling = false;
     let callButtonText = 'Start Call';
-    let audio = new Audio('/ringtone.mp3');
+    let audio = new Audio('/static/sounds/phone-ring.mp3');
     let conversation;
 
     const AGENT_ID = 'vlm7BH4czcVM9TAnsULl'; // Replace with your agent ID
