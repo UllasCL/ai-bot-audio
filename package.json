@@ -19,7 +19,6 @@
     "vite": "^6.0.3"
   },
   "dependencies": {
-    "@CDNA-Technologies/nuclei-voice-assistant-poc": "^0.0.19",
     "@sveltejs/adapter-auto": "^3.3.1",
     "@vapi-ai/web": "^2.2.6",
     "axios": "^1.7.9",
