@@ -66,7 +66,7 @@
 
 <style>
     .container {
-        background-color: #d11a7b;
+        background-color: #fff;
         color: #fff;
         height: 100%;
         display: flex;
@@ -77,6 +77,7 @@
     }
 
     .center-content {
+        color: #000;
         flex: 1; /* Ensures it takes up only the remaining space */
         display: flex;
         flex-direction: column;
