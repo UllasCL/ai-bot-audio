@@ -68,13 +68,34 @@
     .container {
         background-color: #d11a7b;
         color: #fff;
-        min-height: 100dvh;
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         font-family: 'Segoe UI', sans-serif;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow-y: hidden; /* Prevent scrolling issues */
+    }
+
+    .center-content {
+        flex: 1; /* Ensures it takes up only the remaining space */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 1rem;
+        box-sizing: border-box; /* Ensures padding doesn't affect layout */
+    }
+
+    .footer {
+        padding: 1rem;
+        background: #fff;
+        text-align: center;
+        color: #555;
+        font-size: 0.9rem;
+        width: 100%;
+        box-sizing: border-box;
+        flex-shrink: 0; /* Prevents the footer from shrinking */
     }
 
     .top-bar {
@@ -95,15 +116,6 @@
         border: none;
     }
 
-    .center-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 1rem;
-    }
 
     .center-content img {
         width: 120px;
@@ -134,17 +146,6 @@
         transition: background 0.3s ease;
     }
 
-    .footer {
-        padding: 1rem;
-        background: #fff;
-        text-align: center;
-        color: #555;
-        font-size: 0.9rem;
-        position: relative;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
     .nuclei-logo {
         height: 1rem;
         vertical-align: middle;
@@ -168,8 +169,36 @@
             min-height: 100dvh;
         }
     }
+
+    .mobile-frame {
+        width: 360px; /* Adjusted width for better aspect ratio */
+        height: 700px; /* Adjusted height for better aspect ratio */
+        max-height: 90vh;
+        border: 12px solid #333; /* Darker frame for a premium look */
+        border-radius: 40px; /* More rounded corners */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
+        background: linear-gradient(180deg, #f0f0f0, #e0e0e0); /* Subtle gradient for the frame */
+        overflow: hidden;
+        position: relative;
+        margin: 2rem auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-notch {
+        width: 120px;
+        height: 20px;
+        background: #333;
+        border-radius: 10px;
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 </style>
 
+<div class="mobile-frame">
+    <div class="mobile-notch"></div>
 <div class="container">
     <div class="top-bar">
         <img src="https://www.telekom.com/resource/crblob/1081046/05272d789be738a790edff915a075ec4/favicon-svg-data.svg" alt="Logo" height="28" />
@@ -186,4 +215,5 @@
     <div class="footer">
         Demo AI Agent – Powered by <img src="https://cdn.prod.website-files.com/65b08798a478bf4894ad2c71/6646b4ece5993d9b5407a241_Nuclei.svg" alt="Nuclei" class="nuclei-logo" />
     </div>
+</div>
 </div>
